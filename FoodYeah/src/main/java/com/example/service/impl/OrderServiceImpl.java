@@ -141,4 +141,15 @@ public class OrderServiceImpl implements OrderService {
             }
             return false;
         }
+
+    public String getOrderStatus(Long id){
+        Order order = getOrder(id);
+        if(order != null){
+        String status = order.getState();
+        return status;
+        }
+        else{
+            return "Order Not Created";
+        }
+    }
 }

@@ -92,4 +92,16 @@ public class OrderController {
             return ResponseEntity.noContent().build();
         }
     }
+
+    @GetMapping("status/{id}")
+    public ResponseEntity<Order> getOrderStatus(@PathVariable("id") long id) {
+        status = orderService.getOrderStatus(id);
+        if(orderService.getOrder(id) == null){
+            return ResponseEntity.notFound().build();
+        }
+        else{
+            return status;
+        }
+    }
+
 }

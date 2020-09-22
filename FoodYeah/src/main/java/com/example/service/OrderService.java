@@ -7,6 +7,7 @@ import java.util.List;
 public interface OrderService {
     List<Order> findOrderAll();
     Order getOrder(Long id);
+    String getOrderStatus(Long id);
     Order createOrder(Order order);
     void SetEndTime(Order order);
     void DecreaseStock(Order order);
