@@ -1,12 +1,12 @@
 Feature: As a user of the application, I want the application to notify me when my plate is ready to be
   picked up in the university's cafeteria
 
-  Scenario: Stock decrease
-    Given a user who places an order with a certain quantity of a product,
-    When the order is delivered,
-    Then the stock must decrease in relation to the quantity that the user has bought
+  Scenario: Notify the user that the purchase was made and that he must pick up
+    Given a user making a transaction
+    When he successfully bought his plate,
+    Then the application must notify the user that the purchase was made and that he must pick up his plate in the dining room.
 
-  Scenario: add to shopping cart
-    Given an application user who wants to be able to pay through the app to avoid the checkout line,
-    When they press the cart icon positioned on the food they select,
-    Then it will be added to their shopping cart
+  Scenario: Notify the user of the approximate time to wait for her plate
+    Given a user performing a transaction
+    When she successfully purchased her plate,
+    Then the application should notify the user of the approximate time to wait for her plate. This value has to be calculated by an average of values that the application is capturing that are saved in the database
