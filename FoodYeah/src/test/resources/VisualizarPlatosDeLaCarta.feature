@@ -1,5 +1,5 @@
 Feature: As a user of the application, I want to view the dishes of the menu so that I can choose at
-  any time and in any place what I am going to consume.
+  any time and in any place what I am going to consume
 
   Scenario: View the dish's description
     Given a user who wants to view the dishes of the menu,

@@ -1,5 +1,5 @@
 Feature: As a user of the application, I want to view the weekly menu to be aware of the menu
-  items that will be offered on certain days.
+  items that will be offered on certain days
 
   Scenario: Show description
     Given a user who wants to view the weekly menu,
