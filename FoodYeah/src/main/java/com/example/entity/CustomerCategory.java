@@ -19,7 +19,7 @@ public class CustomerCategory {
 
     @ApiModelProperty(value = "ID de la categoria de usuarios", dataType = "Long", position = 1)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "Nombre de la categoría", dataType = "String", position = 2)

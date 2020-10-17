@@ -23,7 +23,7 @@ public class Card {
     @ApiModelProperty(value="ID de la tarjeta", dataType="Long",  example="1", position=1)
     @Id
     @Column(name = "card_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ApiModelProperty(value="Usuario de la tarjeta", dataType="Customer", position=2)

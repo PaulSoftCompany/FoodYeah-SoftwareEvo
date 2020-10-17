@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class OrderDetail {
     @ApiModelProperty(value="ID del detalle de la orden", dataType="Long", position=1)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ApiModelProperty(value="La orden al cual pertenece el detalle", dataType="Order", position=2)

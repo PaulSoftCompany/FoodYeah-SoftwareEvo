@@ -24,7 +24,7 @@ public class Order{
 
     @ApiModelProperty(value="ID de la orden", dataType="Long", position=1)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ApiModelProperty(value="El usuario de la orden", dataType="Customer", position=2)

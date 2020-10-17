@@ -1,50 +1,112 @@
 package com.example;
 
-import com.example.entity.Order;
-import com.example.entity.OrderDetail;
-import com.example.entity.Product;
-import com.example.repository.CardRepository;
-import com.example.repository.OrderDetailRepository;
-import com.example.repository.OrderRepository;
-import com.example.repository.ProductRepository;
-import com.example.service.OrderService;
+import com.example.entity.*;
+import com.example.repository.*;
+import com.example.service.*;
 import com.example.service.impl.OrderServiceImpl;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.junit.Cucumber;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.xmlunit.diff.Comparison;
 
 import java.util.List;
+import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+public class StepsForVirtualPayment extends SpringIntegrationTest  {
 
-public class StepsForVirtualPayment {
+    @Autowired
+   private ProductService productService;
+    @Autowired
+   private ProductCategoryService categoryService;
+    @Autowired
+   private OrderService orderService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private CustomerCategoryService customerCategoryService;
+    @Autowired
+    private RoleService roleService;
 
-    //
-    @Mock
-    public OrderRepository orderRepository;
-    @Mock
-    private OrderDetailRepository orderDetailRepository;
-    @Mock
-    private ProductRepository productRepository;
-    @Mock
-    private CardRepository cardRepository;
-
-    public OrderService orderService = new OrderServiceImpl(orderRepository,orderDetailRepository,
-            productRepository, cardRepository);
-
-    Product product = Product.builder().productName("awa").stock(30).build();
-    List<OrderDetail> orderDetails;
-    Order order = Order.builder().id(1L).state("CREATED").orderDetails(orderDetails).build();
+    private Order order;
+    private OrderDetail detail;
+    private Product product;
+    private Customer customer;
+    private Role role;
+    private CustomerCategory customerCategory;
+    private ProductCategory productCategory;
     private int oldStock;
     private int quantity;
 
-    //FALTA CREAR EL DETAIL Y AGREGARLO EN EL ORDER PARA METERLE AL SERVICE Y PROBAR_TODO LO DE ABAJO GA
+    void GenerarDatos(){
+
+        ///////////////////////////////////////////////
+        productCategory = new ProductCategory();
+        productCategory.setProductCategoryName("Category");
+        productCategory.setProductCategoryDescription("test");
+        categoryService.createProduct_Category(productCategory);
+        /////////////////////////////////////////////////
+        product = new Product();
+        product.setProductName("Product");
+        product.setCategory(productCategory);
+        product.setStock(20);
+        String[] ingredients = {"Ingredient1", "Ingredient2"};
+        product.setIngredients(ingredients);
+        product.setProductPrice(30);
+        product.setImageUrl("test");
+        productService.createProduct(product);
+        //////////////////////////////////////////////////
+        detail = new OrderDetail();
+        byte quantity = 4;
+        detail.setQuantity(quantity);
+        detail.setProduct(product);
+
+        ///////////////////////////////////////////////
+        customerCategory = new CustomerCategory();
+        customerCategory.setCustomerCategoryName("Test");
+        customerCategory.setCustomerCategoryDescription("Test");
+        customerCategoryService.createCustomerCategory(customerCategory);
+        ////////////////////////////////////////////
+        role = new Role();
+        role.setRoleName("Admin");
+        role.setRoleDescription("Admin");
+        roleService.createRole(role);
+        role.setRoleName("User");
+        role.setRoleDescription("User");
+        roleService.createRole(role);
+
+        /////////////////////////////////////////
+        customer = new Customer();
+        byte age = 20;
+        customer.setCustomerAge(age);
+        customer.setCustomerName("TestName");
+        customer.setCustomerCategory(customerCategory);
+        customer.setUsername("asername@upc.edu.pe");
+        customer.setPassword("ptestr41241d");
+        customerService.createCustomer(customer);
+
+        //////////////////////////////////////////////
+        List<OrderDetail>_orderdetail;
+        _orderdetail = new Vector<OrderDetail>();
+        _orderdetail.add(detail);
+        order = new Order();
+        order.setCostumer(customer);
+        order.setOrderDetails(_orderdetail);
+
+
+    }
 
     @Given("a user who places an order with a certain quantity of a product,")
     public void aUserWhoPlacesAnOrderWithACertainQuantityOfAProduct() {
-        orderService.createOrder(order);
+        GenerarDatos();
+        Order recipt = orderService.createOrder(order);
         OrderDetail orderDummy = order.getOrderDetails().get(0);
         this.oldStock = orderDummy.getProduct().getStock();
         this.quantity = orderDummy.getQuantity();

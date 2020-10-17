@@ -11,6 +11,7 @@ import com.example.repository.ProductRepository;
 import com.example.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.sound.sampled.BooleanControl;
@@ -53,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order createOrder(Order order) {
         PrepareDetail(order);
         PrepareHeader(order);
@@ -70,8 +73,9 @@ public class OrderServiceImpl implements OrderService {
     private void PrepareDetail(Order order) {
         List<OrderDetail> _orderDetails = order.getOrderDetails();
         for (OrderDetail orderDetail : _orderDetails) {
-            Product product = productRepository.getOne(orderDetail.getProduct().getId());
-            orderDetail.setUnitPrice(product.getProductPrice());
+            Optional<Product> product ;
+            product = productRepository.findById(orderDetail.getProduct().getId());
+            orderDetail.setUnitPrice(product.get().getProductPrice());
             orderDetail.setTotalPrice(orderDetail.getUnitPrice() * orderDetail.getQuantity());
             orderDetail.setState("CREATED");
             orderDetailRepository.save(orderDetail);
