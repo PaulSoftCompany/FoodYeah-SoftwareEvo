@@ -48,6 +48,7 @@ public class StepsForReceipt extends SpringIntegrationTest{
         productCategory.setProductCategoryName("Category");
         productCategory.setProductCategoryDescription("test");
         categoryService.createProduct_Category(productCategory);
+
         /////////////////////////////////////////////////
         product = new Product();
         product.setProductName("Product");
@@ -70,6 +71,7 @@ public class StepsForReceipt extends SpringIntegrationTest{
         customerCategory.setCustomerCategoryName("Test");
         customerCategory.setCustomerCategoryDescription("Test");
         customerCategoryService.createCustomerCategory(customerCategory);
+
         ////////////////////////////////////////////
         role = new Role();
         role.setRoleName("Admin");
