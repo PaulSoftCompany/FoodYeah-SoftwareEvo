@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class StepsForFilterSearch extends SpringIntegrationTest{
 
     @Autowired
@@ -82,5 +84,6 @@ public class StepsForFilterSearch extends SpringIntegrationTest{
             System.out.println(product.getProductName());
         }
 
+        assertThat(productList.size()).isGreaterThan(0);
     }
 }
