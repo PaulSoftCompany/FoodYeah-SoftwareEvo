@@ -40,9 +40,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public Card createCard(Card card) {
 
-        Customer customer = customerRepository.getOne(card.getCustomer().getId());
         card.setState("CREATED");
-        card.setCardOwnerName(customer.getCustomerName());
         return cardRepository.save(card);
 
     }

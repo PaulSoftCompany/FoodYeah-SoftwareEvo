@@ -1,26 +1,18 @@
 package com.example;
 
 import com.example.entity.*;
-import com.example.repository.*;
 import com.example.service.*;
-import com.example.service.impl.OrderServiceImpl;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.junit.Cucumber;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.xmlunit.diff.Comparison;
 
 import java.util.List;
 import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-public class StepsForVirtualPayment extends SpringIntegrationTest  {
+
+public class StepsForReceipt extends SpringIntegrationTest{
 
     @Autowired
     private ProductService productService;
@@ -33,17 +25,21 @@ public class StepsForVirtualPayment extends SpringIntegrationTest  {
     @Autowired
     private CustomerCategoryService customerCategoryService;
     @Autowired
+    private CardService cardService;
+    @Autowired
     private RoleService roleService;
 
     private Order order;
+    private Card card;
     private OrderDetail detail;
     private Product product;
     private Customer customer;
-    private Role role;
     private CustomerCategory customerCategory;
     private ProductCategory productCategory;
-    private int oldStock;
-    private int quantity;
+    private Role role;
+
+    private float oldmoney;
+    private float actualmoney;
 
     void GenerarDatos(){
 
@@ -62,9 +58,10 @@ public class StepsForVirtualPayment extends SpringIntegrationTest  {
         product.setProductPrice(30);
         product.setImageUrl("test");
         productService.createProduct(product);
+
         //////////////////////////////////////////////////
         detail = new OrderDetail();
-        byte quantity = 4;
+        byte quantity = 2;
         detail.setQuantity(quantity);
         detail.setProduct(product);
 
@@ -92,8 +89,21 @@ public class StepsForVirtualPayment extends SpringIntegrationTest  {
         customer.setPassword("ptestr41241d");
         customerService.createCustomer(customer);
 
+        //////////////////////////////////////////////////
+        card = new Card();
+        card.setCardCvi(123);
+        card.setCardNumber("test");
+        card.setCardExpireDate("test");
+        card.setCardMoney(150);
+        card.setCardType(true);
+        card.setCustomer(customer);
+        card.setCardOwnerName(customer.getCustomerName());
+        cardService.createCard(card);
+        this.oldmoney = card.getCardMoney();
+
+
         //////////////////////////////////////////////
-        List<OrderDetail>_orderdetail;
+        List<OrderDetail> _orderdetail;
         _orderdetail = new Vector<OrderDetail>();
         _orderdetail.add(detail);
         order = new Order();
@@ -103,41 +113,29 @@ public class StepsForVirtualPayment extends SpringIntegrationTest  {
 
     }
 
-    @Given("a user who places an order with a certain quantity of a product,")
-    public void aUserWhoPlacesAnOrderWithACertainQuantityOfAProduct() {
+
+    @Given("a user making a transaction")
+    public void aUserMakingATransaction() {
         GenerarDatos();
         Order recipt = orderService.createOrder(order);
-        OrderDetail orderDummy = order.getOrderDetails().get(0);
-        this.oldStock = orderDummy.getProduct().getStock();
-        this.quantity = orderDummy.getQuantity();
     }
 
-    @When("the order is delivered,")
-    public void theOrderIsDelivered() {
-        if(order.getState().equals("CREATED"))
-            order.setState("DELIVERED");
+    @When("he successfully bought his plate")
+    public void heSuccessfullyBoughtHisPlate() {
+
+        if ((card.getCardMoney() - order.getTotalPrice()) >= 0) {
+            card.setCardMoney(card.getCardMoney() - order.getTotalPrice());
+        }
+        this.actualmoney = card.getCardMoney();
+        System.out.println(oldmoney);
+        System.out.println(actualmoney);
+
+
     }
 
-    @Then("the stock must decrease in relation to the quantity that the user has bought")
-    public void theStockMustDecreaseInRelationToTheQuantityThatTheUserHasBought() {
-        orderService.DecreaseStock(order);
-        assertEquals(order.getOrderDetails().get(0).getProduct().getStock(),this.oldStock-this.quantity);
-    }
+    @Then("the application must send the recepit to his educational email, wich is afiliated with the university")
+    public void theApplicationMustSendTheRecepitToHisEducationalEmailWichIsAfiliatedWithTheUniversity() {
+        assertEquals(this.actualmoney,this.oldmoney - (order.getTotalPrice()));
 
-
-
-
-
-
-    @Given("an application user who wants to be able to pay through the app to avoid the checkout line,")
-    public void anApplicationUserWhoWantsToBeAbleToPayThroughTheAppToAvoidTheCheckoutLine() {
-    }
-
-    @When("they press the cart icon positioned on the food they select,")
-    public void theyPressTheCartIconPositionedOnTheFoodTheySelect() {
-    }
-
-    @Then("it will be added to their shopping cart")
-    public void itWillBeAddedToTheirShoppingCart() {
     }
 }
