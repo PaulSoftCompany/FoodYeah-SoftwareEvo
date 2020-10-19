@@ -7,6 +7,7 @@ import com.example.repository.CustomerRepository;
 import com.example.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class CardServiceImpl implements CardService {
 
 
     @Override
+    @Transactional
     public Card createCard(Card card) {
 
         card.setState("CREATED");
