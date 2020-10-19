@@ -3,7 +3,6 @@ package com.example.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
