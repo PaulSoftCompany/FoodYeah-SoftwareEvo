@@ -21,7 +21,7 @@ public class ProductRepositoryMockTest {
     @Autowired
     private ProductRepository productRepository;
 
-    /*@Test
+    @Test
     public void whenFindByCategory_thenReturnListProduct(){
         Product product01 = Product.builder()
                 .name("computer")
@@ -38,5 +38,5 @@ public class ProductRepositoryMockTest {
         Assertions.assertThat(founds.size()).isEqualTo(3);
 
 
-    }*/
+    }
 }

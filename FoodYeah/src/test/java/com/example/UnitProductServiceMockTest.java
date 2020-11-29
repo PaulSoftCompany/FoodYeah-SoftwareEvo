@@ -27,8 +27,6 @@ public class ProductServiceMockTest {
 
     private ProductService productService;
 
-
-/*
     @BeforeEach
     public void setup(){
         MockitoAnnotations.initMocks(this);
@@ -58,7 +56,7 @@ public class ProductServiceMockTest {
     public void whenValidUpdateStock_ThenReturnNewStock(){
         Product newStock = productService.updateStock(1L,Double.parseDouble("8"));
         Assertions.assertThat(newStock.getStock()).isEqualTo(13);
-    }*/
+    }
 
 }
 
